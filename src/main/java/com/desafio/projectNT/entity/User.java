@@ -2,19 +2,33 @@ package com.desafio.projectNT.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Entity(name = "Usuario")
 public class User {	
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank(message = "Username é Obrigatório.")
 	private String username;
-	private String password;	
+	
+	@NotBlank(message = "Password é Obrigatório.")
+	private String password;
+	
+	@NotBlank(message = "CPF é Obrigatório.")
 	private String cpf;
+	
+	@Email
 	private String email;
+	
+	@NotBlank(message = "Tipo de Usuário é Obrigatório.")
 	private String tipoUser;
+	private boolean licenca;
 
 	public Long getId() {
 		return id;
@@ -62,5 +76,13 @@ public class User {
 
 	public void setTipoUser(String tipoUser) {
 		this.tipoUser = tipoUser;
+	}
+	
+	public boolean isLicenca() {
+		return licenca;
+	}
+
+	public void setLicenca(boolean licenca) {
+		this.licenca = licenca;
 	}
 }

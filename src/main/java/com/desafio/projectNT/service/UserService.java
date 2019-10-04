@@ -1,8 +1,9 @@
 package com.desafio.projectNT.service;
 
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +28,20 @@ public class UserService {
 	
 	public List<User> listaUsuarios() {
 		return	userRepository.findAll();
-	}	
+	}
+	
+	public User buscaUsuario(long id) {
+		return	userRepository.findById(id).orElse(null);
+	}
+	
+	public User buscaUsername(String username) {
+		
+		User user = userRepository.findByUsername(username);
+		if(user == null)
+			return HttpStatus.NOT_FOUND);
+		else 	
+			return userRepository.findByUsername(username);
+	}
 	
 	public User AlteraPassword(long id, UserDto password) {
 		User user1 = userRepository.findById(id).orElse(null);
@@ -37,5 +51,6 @@ public class UserService {
 	
 	public void deleteUsuario(Long id) {
 		userRepository.deleteById(id);
-	}	
+	}
+	
 }

@@ -2,6 +2,8 @@ package com.desafio.projectNT.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,8 +19,9 @@ import com.desafio.projectNT.dto.UserDto;
 import com.desafio.projectNT.entity.User;
 import com.desafio.projectNT.service.UserService;
 
+@Valid
 @Controller 
-@RequestMapping(path="/usuarios") 
+@RequestMapping(path="/usuarios")
 public class UserController {
 	
 	private UserService userService;
@@ -37,7 +40,17 @@ public class UserController {
 		return new ResponseEntity<List<User>>(userService.listaUsuarios(), HttpStatus.OK);
 	}
 	
-	@PutMapping("/edit")
+	@GetMapping(path="/buscaUsuario")
+	public ResponseEntity<User> getUser(Long id) {
+		return new ResponseEntity<User>(userService.buscaUsuario(id), HttpStatus.OK);
+	}
+	
+	@GetMapping(path="/buscaUsername")
+	public ResponseEntity<User> getUsername(String username) {
+		return new ResponseEntity<User>(userService.buscaUsername(username), HttpStatus.OK);
+	}
+		
+	@PutMapping("/edit")///
 	public ResponseEntity<User> update(@RequestParam("id") Long id, @RequestBody UserDto password) {
 		return new ResponseEntity<User>(userService.AlteraPassword(id,password), HttpStatus.OK);
 	}

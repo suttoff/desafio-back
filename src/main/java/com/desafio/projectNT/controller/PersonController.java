@@ -44,8 +44,7 @@ public class PersonController {
 	@PutMapping("/edit")
 	public ResponseEntity<Person> update(@RequestParam("id") Long id, @RequestBody PersonProjetoDto personDto) {
 		return new ResponseEntity<Person>(personService.AlteraPerson(id,personDto), HttpStatus.OK);
-	}
-	
+	}	
 	
 	@DeleteMapping("/delete")
 	public ResponseEntity<Person> delete(@RequestParam("id") Long id) {
