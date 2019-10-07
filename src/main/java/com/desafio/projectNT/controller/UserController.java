@@ -46,14 +46,15 @@ public class UserController {
 	}
 	
 	@GetMapping(path="/buscaUsername")
-	public ResponseEntity<User> getUsername(String username) {
+	public ResponseEntity<User> getUsername(String username) throws Exception {
 		return new ResponseEntity<User>(userService.buscaUsername(username), HttpStatus.OK);
 	}
 		
-	@PutMapping("/edit")///
+	@PutMapping("/edit")
 	public ResponseEntity<User> update(@RequestParam("id") Long id, @RequestBody UserDto password) {
 		return new ResponseEntity<User>(userService.AlteraPassword(id,password), HttpStatus.OK);
 	}
+	
 	
 	@DeleteMapping("/delete")
 	public ResponseEntity<User> delete(@RequestParam("id") Long id) {

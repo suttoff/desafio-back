@@ -1,13 +1,8 @@
 package com.desafio.projectNT.service;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.desafio.projectNT.dto.UserDto;
 import com.desafio.projectNT.entity.User;
 import com.desafio.projectNT.repository.UserRepository;
@@ -16,31 +11,31 @@ import com.desafio.projectNT.repository.UserRepository;
 public class UserService {
 
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
-	
+
 	public User criarUsuario(User user) {
 		return userRepository.save(user);
 	}
-	
+
 	public List<User> listaUsuarios() {
-		return	userRepository.findAll();
+		return userRepository.findAll();
 	}
-	
+
 	public User buscaUsuario(long id) {
-		return	userRepository.findById(id).orElse(null);
+		return userRepository.findById(id).orElse(null);
 	}
-	
-	public User buscaUsername(String username) {
-		
+
+	public User buscaUsername(String username) throws Exception {
 		User user = userRepository.findByUsername(username);
-		if(user == null)
-			return HttpStatus.NOT_FOUND);
-		else 	
+		if (user == null) {
+			throw new Exception();
+		} else {
 			return userRepository.findByUsername(username);
+		}
 	}
 	
 	public User AlteraPassword(long id, UserDto password) {
@@ -48,9 +43,9 @@ public class UserService {
 		user1.setPassword(password.getPassword());
 		return userRepository.save(user1);
 	}
-	
+
 	public void deleteUsuario(Long id) {
 		userRepository.deleteById(id);
 	}
-	
+
 }
