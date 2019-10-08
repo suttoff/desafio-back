@@ -14,56 +14,55 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.desafio.projectNT.dto.UserDto;
 import com.desafio.projectNT.entity.User;
 import com.desafio.projectNT.service.UserService;
 
 @Valid
-@Controller 
-@RequestMapping(path="/usuarios")
+@Controller
+@RequestMapping(path = "/usuarios")
 public class UserController {
-	
+
 	private UserService userService;
-	
+
 	public UserController(UserService UserService) {
 		this.userService = UserService;
 	}
 
-	@PostMapping(path="/add") 
-	public ResponseEntity<User> addNewUser(@RequestBody User user) {		
+	@PostMapping(path = "/add")
+	public ResponseEntity<User> addNewUser(@RequestBody User user) {
 		return new ResponseEntity<User>(userService.criarUsuario(user), HttpStatus.CREATED);
 	}
 
-	@GetMapping(path="/all")
+	@GetMapping(path = "/all")
 	public ResponseEntity<List<User>> getAllUsers() {
 		return new ResponseEntity<List<User>>(userService.listaUsuarios(), HttpStatus.OK);
 	}
-	
-	@GetMapping(path="/buscaUsuario")
+
+	@GetMapping(path = "/buscaUsuario")
 	public ResponseEntity<User> getUser(Long id) {
 		return new ResponseEntity<User>(userService.buscaUsuario(id), HttpStatus.OK);
 	}
-	
-	@GetMapping(path="/buscaUsername")
+
+	@GetMapping(path = "/buscaUsername")
 	public ResponseEntity<User> getUsername(String username) throws Exception {
 		return new ResponseEntity<User>(userService.buscaUsername(username), HttpStatus.OK);
 	}
-		
+
+	@GetMapping(path = "/verificaLicenca")
+	public ResponseEntity<User> getLicenca(String username) throws Exception {
+		return new ResponseEntity<User>(userService.verificaLicenca(username), HttpStatus.OK);
+	}
+
 	@PutMapping("/edit")
 	public ResponseEntity<User> update(@RequestParam("id") Long id, @RequestBody UserDto password) {
-		return new ResponseEntity<User>(userService.AlteraPassword(id,password), HttpStatus.OK);
+		return new ResponseEntity<User>(userService.AlteraPassword(id, password), HttpStatus.OK);
 	}
-	
-	
+
 	@DeleteMapping("/delete")
 	public ResponseEntity<User> delete(@RequestParam("id") Long id) {
 		userService.deleteUsuario(id);
 		return new ResponseEntity<User>(HttpStatus.OK);
 	}
-	
-	
-	
-	
-	
+
 }

@@ -34,10 +34,19 @@ public class UserService {
 		if (user == null) {
 			throw new Exception();
 		} else {
-			return userRepository.findByUsername(username);
+			return user;
 		}
 	}
-	
+
+	public User verificaLicenca(String username) throws Exception {
+		User user = userRepository.findByUsername(username);
+		if (user.isLicenca() == true) {
+			return user;
+		}
+		throw new Exception();
+	}
+
+
 	public User AlteraPassword(long id, UserDto password) {
 		User user1 = userRepository.findById(id).orElse(null);
 		user1.setPassword(password.getPassword());

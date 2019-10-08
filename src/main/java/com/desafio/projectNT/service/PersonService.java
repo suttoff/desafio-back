@@ -12,32 +12,31 @@ import com.desafio.projectNT.repository.PersonRepository;
 
 @Component
 public class PersonService {
-	
+
 	private PersonRepository personRepository;
-	
+
 	@Autowired
 	public PersonService(PersonRepository personRepository) {
 		this.personRepository = personRepository;
 	}
-	
+
 	public Person criarColaborador(Person person) {
 		return personRepository.save(person);
 	}
-	
+
 	public List<Person> listaColaborador() {
-		return	personRepository.findAll();
-	}	
-	
+		return personRepository.findAll();
+	}
+
 	public Person AlteraPerson(long id, PersonProjetoDto personDto) {
 		Person person = personRepository.findById(id).orElse(null);
 		person.setCargo(personDto.getCargo());
 		person.setProjeto(personDto.getProjeto());
 		return personRepository.save(person);
 	}
-	
-	
+
 	public void deleteColaborador(Long id) {
 		personRepository.deleteById(id);
-	}	
+	}
 
 }

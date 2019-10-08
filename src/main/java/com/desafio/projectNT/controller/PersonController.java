@@ -1,6 +1,5 @@
 package com.desafio.projectNT.controller;
 
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -22,35 +21,34 @@ import com.desafio.projectNT.service.PersonService;
 import com.desafio.projectNT.service.UserService;
 
 @Controller
-@RequestMapping(path="/colaborador") 
+@RequestMapping(path = "/colaborador")
 public class PersonController {
-	
+
 	private PersonService personService;
-	
+
 	public PersonController(PersonService PersonService) {
 		this.personService = PersonService;
 	}
-	
-	@PostMapping(path="/add") 
-	public ResponseEntity<Person> addNewPerson(@RequestBody Person person) {		
+
+	@PostMapping(path = "/add")
+	public ResponseEntity<Person> addNewPerson(@RequestBody Person person) {
 		return new ResponseEntity<Person>(personService.criarColaborador(person), HttpStatus.CREATED);
 	}
 
-	@GetMapping(path="/all")
+	@GetMapping(path = "/all")
 	public ResponseEntity<List<Person>> getAllPerson() {
 		return new ResponseEntity<List<Person>>(personService.listaColaborador(), HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/edit")
 	public ResponseEntity<Person> update(@RequestParam("id") Long id, @RequestBody PersonProjetoDto personDto) {
-		return new ResponseEntity<Person>(personService.AlteraPerson(id,personDto), HttpStatus.OK);
-	}	
-	
+		return new ResponseEntity<Person>(personService.AlteraPerson(id, personDto), HttpStatus.OK);
+	}
+
 	@DeleteMapping("/delete")
 	public ResponseEntity<Person> delete(@RequestParam("id") Long id) {
 		personService.deleteColaborador(id);
 		return new ResponseEntity<Person>(HttpStatus.OK);
 	}
-	
 
 }
