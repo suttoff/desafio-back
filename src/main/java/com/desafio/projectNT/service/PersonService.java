@@ -1,42 +1,41 @@
 package com.desafio.projectNT.service;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.desafio.projectNT.dto.PersonProjetoDto;
 import com.desafio.projectNT.entity.Person;
+import com.desafio.projectNT.exception.NotFoundException;
 import com.desafio.projectNT.repository.PersonRepository;
+import org.springframework.stereotype.Service;
 
-@Component
+import java.util.List;
+
+@Service
 public class PersonService {
 
-	private PersonRepository personRepository;
+    private final PersonRepository repository;
 
-	@Autowired
-	public PersonService(PersonRepository personRepository) {
-		this.personRepository = personRepository;
-	}
+    public PersonService(PersonRepository repository) {
+        this.repository = repository;
+    }
 
-	public Person criarColaborador(Person person) {
-		return personRepository.save(person);
-	}
+    public Person create(Person person) {
+        return repository.save(person);
+    }
 
-	public List<Person> listaColaborador() {
-		return personRepository.findAll();
-	}
+    public List<Person> getAll() {
+        return repository.findAll();
+    }
 
-	public Person AlteraPerson(long id, PersonProjetoDto personDto) {
-		Person person = personRepository.findById(id).orElse(null);
-		person.setCargo(personDto.getCargo());
-		person.setProjeto(personDto.getProjeto());
-		return personRepository.save(person);
-	}
+    public Person update(long id, PersonProjetoDto personDto) throws NotFoundException {
+        Person person = repository.findById(id)
+                .orElseThrow(NotFoundException::new);
 
-	public void deleteColaborador(Long id) {
-		personRepository.deleteById(id);
-	}
+        person.setCargo(personDto.getCargo());
+        person.setProjeto(personDto.getProjeto());
+        return repository.save(person);
+    }
 
+    public void delete(Long id) throws NotFoundException {
+		repository.findById(id).orElseThrow(NotFoundException::new);
+		repository.deleteById(id);
+    }
 }
