@@ -1,36 +1,35 @@
 package com.desafio.projectNT.service;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import com.desafio.projectNT.dto.UserDto;
 import com.desafio.projectNT.entity.User;
+import com.desafio.projectNT.exception.NotFoundException;
 import com.desafio.projectNT.repository.UserRepository;
 
-@Component
+@Service
 public class UserService {
 
-	private UserRepository userRepository;
+	private UserRepository repository;
 
-	@Autowired
 	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
+		this.repository = userRepository;
 	}
 
-	public User criarUsuario(User user) {
-		return userRepository.save(user);
+	public User create(User user) {
+		return repository.save(user);
 	}
 
-	public List<User> listaUsuarios() {
-		return userRepository.findAll();
+	public List<User> getAll() {
+		return repository.findAll();
 	}
 
-	public User buscaUsuario(long id) {
-		return userRepository.findById(id).orElse(null);
+	public User getId(long id) {
+		return repository.findById(id).orElse(null);
 	}
 
-	public User buscaUsername(String username) throws Exception {
-		User user = userRepository.findByUsername(username);
+	public User getUsername(String username) throws Exception {
+		User user = repository.findByUsername(username);
 		if (user == null) {
 			throw new Exception();
 		} else {
@@ -38,23 +37,23 @@ public class UserService {
 		}
 	}
 
-	public User verificaLicenca(String username) throws Exception {
-		User user = userRepository.findByUsername(username);
+	public User checkLicense(String username) throws Exception {
+		User user = repository.findByUsername(username);
 		if (user.isLicenca() == true) {
 			return user;
 		}
 		throw new Exception();
 	}
 
-
-	public User AlteraPassword(long id, UserDto password) {
-		User user1 = userRepository.findById(id).orElse(null);
+	public User updatePassword(long id, UserDto password) {
+		User user1 = repository.findById(id).orElse(null);
 		user1.setPassword(password.getPassword());
-		return userRepository.save(user1);
+		return repository.save(user1);
 	}
 
-	public void deleteUsuario(Long id) {
-		userRepository.deleteById(id);
+	public void deleteUser(Long id) throws NotFoundException {
+		repository.findById(id).orElseThrow(NotFoundException::new);
+		repository.deleteById(id);
 	}
 
 }

@@ -42,11 +42,11 @@ public class PersonController {
     @PutMapping("/{id}")
     public Person update(@PathVariable("id") Long id, @RequestBody PersonProjetoDto personDto) throws NotFoundException {
         return service.update(id, personDto);
-    }
+    } 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) throws NotFoundException {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) throws NotFoundException {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

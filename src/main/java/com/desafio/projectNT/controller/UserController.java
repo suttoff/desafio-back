@@ -1,68 +1,70 @@
 package com.desafio.projectNT.controller;
 
 import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.desafio.projectNT.dto.UserDto;
 import com.desafio.projectNT.entity.User;
+import com.desafio.projectNT.exception.NotFoundException;
 import com.desafio.projectNT.service.UserService;
 
-@Valid
-@Controller
-@RequestMapping(path = "/usuarios")
+
+@RestController
+@RequestMapping("/user")
 public class UserController {
 
-	private UserService userService;
+	private final UserService service;
 
-	public UserController(UserService UserService) {
-		this.userService = UserService;
+	public UserController(UserService service) {
+		this.service = service;
 	}
 
-	@PostMapping(path = "/add")
-	public ResponseEntity<User> addNewUser(@RequestBody User user) {
-		return new ResponseEntity<User>(userService.criarUsuario(user), HttpStatus.CREATED);
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public User create(@RequestBody User user) {
+		return service.create(user);
 	}
 
-	@GetMapping(path = "/all")
-	public ResponseEntity<List<User>> getAllUsers() {
-		return new ResponseEntity<List<User>>(userService.listaUsuarios(), HttpStatus.OK);
+	@GetMapping
+	public List<User> getAll() {
+		return service.getAll();
 	}
 
-	@GetMapping(path = "/buscaUsuario")
-	public ResponseEntity<User> getUser(Long id) {
-		return new ResponseEntity<User>(userService.buscaUsuario(id), HttpStatus.OK);
+	@GetMapping("/buscaId")
+	public User getUser(Long id) {
+		return service.getId(id);
 	}
 
-	@GetMapping(path = "/buscaUsername")
-	public ResponseEntity<User> getUsername(String username) throws Exception {
-		return new ResponseEntity<User>(userService.buscaUsername(username), HttpStatus.OK);
+	@GetMapping("/findUsername")
+	public User getUsername(String username) throws Exception {
+		return service.getUsername(username);
 	}
 
-	@GetMapping(path = "/verificaLicenca")
-	public ResponseEntity<User> getLicenca(String username) throws Exception {
-		return new ResponseEntity<User>(userService.verificaLicenca(username), HttpStatus.OK);
+	@GetMapping("/checkLicense")
+	public User getLicenca(String username) throws Exception {
+		return service.checkLicense(username);
 	}
 
-	@PutMapping("/edit")
-	public ResponseEntity<User> update(@RequestParam("id") Long id, @RequestBody UserDto password) {
-		return new ResponseEntity<User>(userService.AlteraPassword(id, password), HttpStatus.OK);
+	@PutMapping("/{id}")
+	public User update(@PathVariable("id") Long id, @RequestBody UserDto password) throws NotFoundException{
+		return service.updatePassword(id, password);
 	}
 
-	@DeleteMapping("/delete")
-	public ResponseEntity<User> delete(@RequestParam("id") Long id) {
-		userService.deleteUsuario(id);
-		return new ResponseEntity<User>(HttpStatus.OK);
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> delete(@PathVariable("id") Long id) throws NotFoundException {
+		service.deleteUser(id);
+		return ResponseEntity.ok().build();
 	}
 
 }
