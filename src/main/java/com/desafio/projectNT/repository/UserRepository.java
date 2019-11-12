@@ -8,6 +8,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	List<User> findAll();
 
 	User findByUsername(String username);
-	User findByLicenca(boolean licenca);	
+	User findByLicenca(boolean licenca);
+
+
+
 
 }

@@ -22,31 +22,32 @@ import java.util.List;
 @RequestMapping("/person")
 public class PersonController {
 
-    private final PersonService service;
+	private final PersonService service;
 
-    public PersonController(PersonService service) {
-        this.service = service;
-    }
+	public PersonController(PersonService service) {
+		this.service = service;
+	}
 
-    @PostMapping
+	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Person create(@RequestBody Person person) {
-        return service.create(person);
-    }
+		return service.create(person);
+	}
 
-    @GetMapping
-    public List<Person> getAll() {
-        return service.getAll();
-    }
+	@GetMapping
+	public List<Person> getAll() {
+		return service.getAll();
+	}
 
-    @PutMapping("/{id}")
-    public Person update(@PathVariable("id") Long id, @RequestBody PersonProjetoDto personDto) throws NotFoundException {
-        return service.update(id, personDto);
-    } 
+	@PutMapping("/{id}")
+	public Person update(@PathVariable("id") Long id, @RequestBody PersonProjetoDto personDto)
+			throws NotFoundException {
+		return service.update(id, personDto);
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) throws NotFoundException {
-        service.delete(id);
-        return ResponseEntity.ok().build();
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity delete(@PathVariable("id") Long id) throws NotFoundException {
+		service.delete(id);
+		return ResponseEntity.ok().build();
+	}
 }

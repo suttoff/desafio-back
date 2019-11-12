@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ProjectNtApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ProjectNtApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ProjectNtApplication.class, args);
+    }
 }

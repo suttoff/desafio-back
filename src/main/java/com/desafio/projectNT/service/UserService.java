@@ -39,7 +39,7 @@ public class UserService {
 
 	public User checkLicense(String username) throws Exception {
 		User user = repository.findByUsername(username);
-		if (user.isLicenca() == true) {
+		if (user.isLicenca()) {
 			return user;
 		}
 		throw new Exception();
@@ -55,5 +55,7 @@ public class UserService {
 		repository.findById(id).orElseThrow(NotFoundException::new);
 		repository.deleteById(id);
 	}
+	
+
 
 }
