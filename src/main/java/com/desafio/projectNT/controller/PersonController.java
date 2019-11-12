@@ -1,54 +1,53 @@
 package com.desafio.projectNT.controller;
 
-import java.util.List;
-
+import com.desafio.projectNT.dto.PersonProjetoDto;
+import com.desafio.projectNT.entity.Person;
+import com.desafio.projectNT.exception.NotFoundException;
+import com.desafio.projectNT.service.PersonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.desafio.projectNT.dto.PersonProjetoDto;
-import com.desafio.projectNT.dto.UserDto;
-import com.desafio.projectNT.entity.Person;
-import com.desafio.projectNT.entity.User;
-import com.desafio.projectNT.service.PersonService;
-import com.desafio.projectNT.service.UserService;
+import java.util.List;
 
-@Controller
-@RequestMapping(path = "/colaborador")
+@RestController
+@RequestMapping("/person")
 public class PersonController {
 
-	private PersonService personService;
+	private final PersonService service;
 
-	public PersonController(PersonService PersonService) {
-		this.personService = PersonService;
+	public PersonController(PersonService service) {
+		this.service = service;
 	}
 
-	@PostMapping(path = "/add")
-	public ResponseEntity<Person> addNewPerson(@RequestBody Person person) {
-		return new ResponseEntity<Person>(personService.criarColaborador(person), HttpStatus.CREATED);
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public Person create(@RequestBody Person person) {
+		return service.create(person);
 	}
 
-	@GetMapping(path = "/all")
-	public ResponseEntity<List<Person>> getAllPerson() {
-		return new ResponseEntity<List<Person>>(personService.listaColaborador(), HttpStatus.OK);
+	@GetMapping
+	public List<Person> getAll() {
+		return service.getAll();
 	}
 
-	@PutMapping("/edit")
-	public ResponseEntity<Person> update(@RequestParam("id") Long id, @RequestBody PersonProjetoDto personDto) {
-		return new ResponseEntity<Person>(personService.AlteraPerson(id, personDto), HttpStatus.OK);
+	@PutMapping("/{id}")
+	public Person update(@PathVariable("id") Long id, @RequestBody PersonProjetoDto personDto)
+			throws NotFoundException {
+		return service.update(id, personDto);
 	}
 
-	@DeleteMapping("/delete")
-	public ResponseEntity<Person> delete(@RequestParam("id") Long id) {
-		personService.deleteColaborador(id);
-		return new ResponseEntity<Person>(HttpStatus.OK);
+	@DeleteMapping("/{id}")
+	public ResponseEntity delete(@PathVariable("id") Long id) throws NotFoundException {
+		service.delete(id);
+		return ResponseEntity.ok().build();
 	}
-
 }
